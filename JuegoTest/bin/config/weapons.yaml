@@ -1,0 +1,13 @@
+weapons:
+- 0:
+    name : Wooden Stick
+    weapon description : It's just a stick, what else did you expect?
+    type : 1
+    attackSlot : Puncture
+    attackDescription : Poke him in the eye!
+    staminaCost: 1
+    damage : 1
+    attackSlot : Bonk
+    attackDescription: Hit him on the head!
+    staminaCost: 2
+    damage : 2

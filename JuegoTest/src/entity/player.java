@@ -33,7 +33,7 @@ public class player extends Entity {
 
 		screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
 		screenY = gp.screenHeigth / 2 - (gp.tileSize / 2);
-
+		// SOLID AREA
 		solidArea = new Rectangle();
 		solidArea.x = 8;
 		solidArea.y = 36;
@@ -41,9 +41,9 @@ public class player extends Entity {
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = 32;
 		solidArea.height = 12;
-
-		attackArea.width = 36;
-		attackArea.height = 36;
+		// ATTACK AREA
+//		attackArea.width = 36;
+//		attackArea.height = 36;
 
 		setDefaultValues();
 		getPlayerImage();
@@ -129,6 +129,7 @@ public class player extends Entity {
 		if (attackslot[ability].getDamage() == 0) {
 			return 0;
 		}
+//		attackArea = currentWeapon.attackArea;
 		return attack = strength + attackslot[ability].getDamage();
 	}
 
@@ -323,42 +324,53 @@ public class player extends Entity {
 
 	public void pickObject(int i) {
 		if (i != 999) {
-			// gp.item[i] = null;
-			attackCanceled = true;
-			String objectName = gp.item[i].name;
-			if (keyH.select) {
-				switch (objectName) {
-				case "key":
-					gp.playSE(1);
-					hasKey++;
-					gp.item[i] = null;
-					gp.ui.addMessage("You got a key!");
-					break;
-
-				case "door":
-					if (hasKey > 0) {
-						gp.playSE(2);
-						gp.item[i] = null;
-						hasKey--;
-						gp.ui.addMessage("You opened the door!");
-					} else {
-						gp.ui.addMessage("You need a key!");
-					}
-					break;
-
-				case "boots":
-					gp.playSE(1);
-					canRun = true;
-					gp.item[i] = null;
-					gp.ui.addMessage("Speed boost acquire! Hold Shift to run");
-					break;
-				case "chest":
-					gp.ui.gameFinished = true;
-					gp.stopMusic();
-					gp.playSE(3);
-					break;
-				}
+			String text;
+			if (inventory.size() != maxInventorySize) {
+				inventory.add(gp.item[i]);
+				gp.playSE(1);
+				text = "Got a " + gp.item[i];
+			} else {
+				text = "You cannot carry any more items!";
 			}
+			gp.ui.addMessage(text);
+			gp.item[i] = null;
+
+//			// gp.item[i] = null;
+//			attackCanceled = true;
+//			String objectName = gp.item[i].name;
+//			if (keyH.select) {
+//				switch (objectName) {
+//				case "key":
+//					gp.playSE(1);
+//					hasKey++;
+//					gp.item[i] = null;
+//					gp.ui.addMessage("You got a key!");
+//					break;
+//
+//				case "door":
+//					if (hasKey > 0) {
+//						gp.playSE(2);
+//						gp.item[i] = null;
+//						hasKey--;
+//						gp.ui.addMessage("You opened the door!");
+//					} else {
+//						gp.ui.addMessage("You need a key!");
+//					}
+//					break;
+//
+//				case "boots":
+//					gp.playSE(1);
+//					canRun = true;
+//					gp.item[i] = null;
+//					gp.ui.addMessage("Speed boost acquire! Hold Shift to run");
+//					break;
+//				case "chest":
+//					gp.ui.gameFinished = true;
+//					gp.stopMusic();
+//					gp.playSE(3);
+//					break;
+//				}
+//			}
 		}
 	}
 

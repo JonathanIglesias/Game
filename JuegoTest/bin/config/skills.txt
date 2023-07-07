@@ -1,0 +1,33 @@
+id:0
+name:Puncture
+description:Poke him in the eye!
+cost:1
+damage:1
+
+id:1
+name:Bonk
+description:Hit him on the head!
+cost:2
+damage:1
+
+id:2
+name:Slash
+description:A basic move, but efective to any fighter
+cost:2
+damage:2
+
+id:3
+name:Thrust
+description:Make a powerful thrust that perfore the enemy
+cost:3
+damage:4
+
+id:4
+name:Warior Roar
+description:Increase your attack power
+cost:5
+.damage:0
+objective:player
+type:buff
+strength:2
+turns:2

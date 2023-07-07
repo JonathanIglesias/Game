@@ -1,0 +1,11 @@
+id:0
+name:Wooden Stick
+weapon description:It's just a stick, what else did you expect?
+skill ID:0
+skill ID:1
+
+id:1
+name:Wooden Sword
+weapon description:A initial weapon for many adventurers.
+skill ID:2
+skill ID:3
