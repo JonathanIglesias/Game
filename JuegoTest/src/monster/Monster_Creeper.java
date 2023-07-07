@@ -15,7 +15,7 @@ public class Monster_Creeper extends Entity {
 
 		this.gp = gp;
 
-		type = 2;
+		type = type_monster;
 		name = "Creeper";
 
 		level = 1;

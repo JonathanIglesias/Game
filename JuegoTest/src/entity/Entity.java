@@ -71,7 +71,7 @@ public class Entity {
 	public final int type_player = 0;
 	public final int type_npc = 1;
 	public final int type_monster = 2;
-	public final int type_sword = 3;
+	public final int type_sword = 3; // Usa este type para reparar las armas al convertilos en una entidad
 	public final int type_axe = 4;
 	public final int type_shield = 5;
 	public final int type_consumable = 6;
@@ -122,6 +122,9 @@ public class Entity {
 		}
 	}
 
+	public void use(Entity entity) {
+	}
+
 	public void update() {
 		setAction();
 
@@ -132,7 +135,7 @@ public class Entity {
 		gp.cChecker.checkEntity(this, gp.monster);
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
-		if (this.type == 2 && contactPlayer == true) {
+		if (this.type == type_monster && contactPlayer == true) {
 			if (gp.player.invincible == false) {
 				// We can give damage
 //				int damage = attack - gp.player.defense;

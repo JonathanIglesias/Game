@@ -393,6 +393,9 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
 			select = false;
 		}
+		if (code == KeyEvent.VK_ENTER) {
+			gp.player.selectItem();
+		}
 
 	}
 

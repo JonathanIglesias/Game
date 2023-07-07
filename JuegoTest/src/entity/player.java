@@ -153,6 +153,11 @@ public class player extends Entity {
 	}
 
 	public void getPlayerAttackImage() {
+
+//		if(currentWeapon == type_sword) {
+//			
+//		}
+
 		attackUp1 = setup("/player/SwordBack1", gp.tileSize, gp.tileSize * 2);
 		attackUp2 = setup("/player/SwordBack2", gp.tileSize, gp.tileSize * 2);
 		attackDown1 = setup("/player/SwordFront1", gp.tileSize, gp.tileSize * 2);
@@ -451,6 +456,28 @@ public class player extends Entity {
 //			gp.playSE();
 //			gp.gameState = gp.dialogueState;
 //			gp.ui.currentDialogue = "You are level " + level + " now!";
+		}
+	}
+
+	public void selectItem() {
+		int itemIndex = gp.ui.getItemIndexOnSlot();
+
+		if (itemIndex < inventory.size()) {
+			Entity selectedItem = inventory.get(itemIndex);
+
+			if (selectedItem.type == type_sword || selectedItem.type == type_axe) {
+//				currentWeapon = selectedItem;
+//				attack = getAttack();
+//				getPlayerAttackImage();
+			}
+			if (selectedItem.type == type_shield) {
+//				currentShield = selectedItem;
+//				defense = getDefense();
+			}
+			if (selectedItem.type == type_consumable) {
+				selectedItem.use(this);
+				inventory.remove(itemIndex);
+			}
 		}
 	}
 
