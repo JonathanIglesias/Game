@@ -6,13 +6,12 @@ import main.GamePanel;
 public class potion extends Entity {
 
 	GamePanel gp;
-	int value = 5;
 
 	public potion(GamePanel gp) {
 		super(gp);
 
 		this.gp = gp;
-
+		value = 5;
 		type = type_consumable;
 		name = "Red Potion";
 //		down1 = setup();

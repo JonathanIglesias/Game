@@ -4,6 +4,7 @@ import java.util.Random;
 
 import entity.Entity;
 import main.GamePanel;
+import object.coin_Bronze;
 import skills.skills;
 
 public class Monster_Creeper extends Entity {
@@ -95,6 +96,26 @@ public class Monster_Creeper extends Entity {
 	public void damageReaction() {
 		actionLockCounter = 0;
 		direction = gp.player.direction;
+	}
+
+	public void checkDrop() {
+
+		// CAST A DIE
+		int i = new Random().nextInt(100) + 1;
+
+		// SET THE MONSTER DROP
+		if (i < 50) {
+			dropItem(new coin_Bronze(gp));
+		}
+//		if(i >= 50 && i < 75) {
+//			
+//		}
+//		if(i >= 75 && i < 100) {
+//			
+//		}
+		if (i >= 50) {
+			dropItem(new coin_Bronze(gp));
+		}
 	}
 
 }

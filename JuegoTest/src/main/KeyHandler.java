@@ -11,6 +11,9 @@ public class KeyHandler implements KeyListener {
 
 	public boolean upPressed, downPressed, leftPressed, rightPressed;
 	public boolean run, select;
+
+//	public boolean enterPressed,shotKeyPressed;
+
 	// DEBUG
 	public boolean showDebugText = false;
 	public boolean checkStats = false;
@@ -223,6 +226,10 @@ public class KeyHandler implements KeyListener {
 			gp.gameState = gp.characterState;
 		}
 
+//		if (code == KeyEvent.VK_F) {
+//			shotKeyPressed = true;
+//		}
+
 		// DEBUG
 		if (code == KeyEvent.VK_T) {
 			if (showDebugText == false) {
@@ -396,6 +403,10 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_ENTER) {
 			gp.player.selectItem();
 		}
+
+//		if (code == KeyEvent.VK_F) {
+//			shotKeyPressed = false;
+//		}
 
 	}
 

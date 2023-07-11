@@ -11,6 +11,7 @@ import object.boots;
 import object.chest;
 import object.door;
 import object.key;
+import object.test;
 import skills.primaryWeapons;
 import skills.skills;
 import skills.specialEffect;
@@ -42,6 +43,10 @@ public class AssetSetter {
 		gp.item[3] = new door(gp);
 		gp.item[3].worldX = 43 * gp.tileSize;
 		gp.item[3].worldY = 41 * gp.tileSize;
+
+		gp.item[4] = new test(gp);
+		gp.item[4].worldX = gp.tileSize * 10;
+		gp.item[4].worldY = gp.tileSize * 30;
 	}
 
 	public void setNPC() {

@@ -62,6 +62,7 @@ public class Entity {
 	public secondaryWeapons currentShield;
 
 	// ITEM ATRIBUTES
+	public int value;
 	public int attackValue;
 	public int defenseValue;
 	public String description = "";
@@ -75,6 +76,7 @@ public class Entity {
 	public final int type_axe = 4;
 	public final int type_shield = 5;
 	public final int type_consumable = 6;
+	public final int type_pickupOnly = 7;
 
 	// public BufferedImage image;
 	public String name;
@@ -87,6 +89,9 @@ public class Entity {
 	public int mana;
 	public int maxStamina;
 	public int stamina;
+
+	public Projectile projectile;
+	public int useCost;
 
 	public boolean move = false;
 
@@ -123,6 +128,20 @@ public class Entity {
 	}
 
 	public void use(Entity entity) {
+	}
+
+	public void checkDrop() {
+	}
+
+	public void dropItem(Entity droppedItem) {
+		for (int i = 0; i < gp.item.length; i++) {
+			if (gp.item[i] == null) {
+				gp.item[i] = droppedItem;
+				gp.item[i].worldX = worldX; // The dead monster's coordinates
+				gp.item[i].worldY = worldY;
+				break;
+			}
+		}
 	}
 
 	public void update() {
@@ -249,7 +268,7 @@ public class Entity {
 				dyingAnimation(g2);
 			}
 
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, screenX, screenY, null);
 
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
@@ -284,7 +303,6 @@ public class Entity {
 			changeAlpha(g2, 1f);
 		}
 		if (dyingCounter > i * 8) {
-			dying = false;
 			alive = false;
 		}
 
