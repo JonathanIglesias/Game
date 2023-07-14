@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -144,6 +145,43 @@ public class Entity {
 		}
 	}
 
+	public Color getParticleColor() {
+		Color color = null;
+		return color;
+	}
+
+	public int getParticleSize() {
+		int size = 0; // 0 pixels
+		return size;
+	}
+
+	public int getParticleSpeed() {
+		int speed = 0;
+		return speed;
+	}
+
+	public int getParticleMaxLife() {
+		int maxLife = 0;
+		return maxLife;
+	}
+
+	public void generateParticle(Entity generator, Entity target) {
+		Color color = generator.getParticleColor();
+		int size = generator.getParticleSize();
+		int speed = generator.getParticleSpeed();
+		int maxLife = generator.getParticleMaxLife();
+
+		Particle p1 = new Particle(gp, generator, color, size, speed, maxLife, -2, -1); // Top left
+		Particle p2 = new Particle(gp, generator, color, size, speed, maxLife, 2, -1); // Top Right
+		Particle p3 = new Particle(gp, generator, color, size, speed, maxLife, -2, 1); // Down left
+		Particle p4 = new Particle(gp, generator, color, size, speed, maxLife, 2, 1); // Down right
+		gp.particleList.add(p1);
+		gp.particleList.add(p2);
+		gp.particleList.add(p3);
+		gp.particleList.add(p4);
+
+	}
+
 	public void update() {
 		setAction();
 
@@ -152,6 +190,7 @@ public class Entity {
 		gp.cChecker.checkObject(this, false);
 		gp.cChecker.checkEntity(this, gp.npc);
 		gp.cChecker.checkEntity(this, gp.monster);
+		gp.cChecker.checkEntity(this, gp.iTile);
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
 		if (this.type == type_monster && contactPlayer == true) {

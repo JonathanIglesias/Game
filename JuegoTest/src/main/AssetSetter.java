@@ -61,6 +61,11 @@ public class AssetSetter {
 		gp.monster[0].worldY = gp.tileSize * 35;
 	}
 
+	public void setInteractiveTile() {
+		int i = 0;
+//		gp.iTile[i] = new DryTree(gp,27,12);
+	}
+
 	public void setStage() {
 		gp.stage = new stage(gp);
 	}

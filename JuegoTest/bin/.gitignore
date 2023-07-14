@@ -1,11 +1,14 @@
+/objects/
+/player/
 /sound/
 /stage/
+/test.png
 /tiles/
 /entity/
+/interactive/
 /main/
 /object/
 /skills/
 /tile/
+/tile_interactive/
 /monster/
-/test.png
-/objects/

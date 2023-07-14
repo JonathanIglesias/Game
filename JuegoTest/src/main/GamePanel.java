@@ -18,6 +18,7 @@ import skills.primaryWeapons;
 import skills.skills;
 import stage.stage;
 import tile.tileManager;
+import tile_interactive.InteractiveTile;
 
 // En esta clase se va a configurar la resolucion
 public class GamePanel extends JPanel implements Runnable {
@@ -66,8 +67,9 @@ public class GamePanel extends JPanel implements Runnable {
 	public Entity npc[] = new Entity[10];
 	public Entity item[] = new Entity[20];
 	public Entity monster[] = new Entity[20];
-	ArrayList<Entity> entityList = new ArrayList<>();
-
+	public ArrayList<Entity> entityList = new ArrayList<>();
+	public InteractiveTile iTile[] = new InteractiveTile[50];
+	public ArrayList<Entity> particleList = new ArrayList<>();
 //	public ArrayList<Entity> projectileList = new ArrayList<>();
 
 	public stage stage;
@@ -98,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable {
 		aSetter.setObject();
 		aSetter.setNPC();
 		aSetter.setMonster();
+		aSetter.setInteractiveTile();
 		aSetter.setStage();
 		playMusic(6);
 		gameState = titleState;
@@ -219,6 +222,23 @@ public class GamePanel extends JPanel implements Runnable {
 //				}
 //			}
 
+			for (int i = 0; i < particleList.size(); i++) {
+				if (particleList.get(i) != null) {
+					if (particleList.get(i).alive == true) {
+						particleList.get(i).update();
+					}
+					if (particleList.get(i).alive == false) {
+						particleList.remove(i);
+					}
+				}
+			}
+
+			for (int i = 0; i < iTile.length; i++) {
+				if (iTile[i] != null) {
+					iTile[i].update();
+				}
+			}
+
 		}
 		if (gameState == pauseState) {
 
@@ -264,6 +284,13 @@ public class GamePanel extends JPanel implements Runnable {
 //			// Jugador
 //			player.draw(g2);
 
+			// INTERACTIVE TILE
+			for (int i = 0; i < iTile.length; i++) {
+				if (iTile[i] != null) {
+					iTile[i].draw(g2);
+				}
+			}
+
 			// ADD ENTITY TO THE LIST
 			entityList.add(player);
 
@@ -283,10 +310,16 @@ public class GamePanel extends JPanel implements Runnable {
 				if (monster[i] != null) {
 					entityList.add(monster[i]);
 				}
-//			for (int i = 0; i < projectileList.size; i++) {
+			}
+//			for (int i = 0; i < projectileList.size(); i++) {
 //				if (projectileList.get(i) != null) {
 //					entityList.add(projectileList.get(i));
 //				}
+
+			for (int i = 0; i < particleList.size(); i++) {
+				if (particleList.get(i) != null) {
+					entityList.add(particleList.get(i));
+				}
 
 			}
 			// SORT
