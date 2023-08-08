@@ -4,8 +4,10 @@ import javax.swing.JFrame;
 
 public class main {
 
+	public static JFrame window;
+
 	public static void main(String[] args) {
-		JFrame window = new JFrame();
+		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Con esto puedes cerrar el programa normalmente cuando
 																// precionas "X"
 		window.setResizable(false); // Esto es para que no ajusten la pantalla manualmente
@@ -13,6 +15,11 @@ public class main {
 
 		GamePanel gamePanel = new GamePanel();
 		window.add(gamePanel);
+
+		gamePanel.config.loadConfig();
+		if (gamePanel.fullScreenOn) {
+			window.setUndecorated(true);
+		}
 
 		window.pack(); // Esto provoca que la ventana encaje con el tamaño establecido del GamePanel
 

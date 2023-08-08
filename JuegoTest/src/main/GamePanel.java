@@ -5,15 +5,18 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import entity.Entity;
-import entity.player;
+import entity.Player;
 import skills.primaryWeapons;
 import skills.skills;
 import stage.stage;
@@ -32,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int tileSize = originalTitleSize * scale; // 48 x 48 tile
 
 	// Tamaño de la ventana
-	public final int maxScreenCol = 16;
+	public final int maxScreenCol = 20;
 	public final int maxScreenRow = 12;
 	public final int screenWidth = tileSize * maxScreenCol; // 768 pixeles
 	public final int screenHeigth = tileSize * maxScreenRow;// 576 pixeles
@@ -40,6 +43,13 @@ public class GamePanel extends JPanel implements Runnable {
 	// WORLD SETTINGS
 	public int maxWorldCol;
 	public int maxWorldRow;
+
+	// For FULL SCREEN
+	int screenWidth2 = screenWidth;
+	int screenHeight2 = screenHeigth;
+	BufferedImage tempScreen;
+	Graphics2D g2;
+	public boolean fullScreenOn = false;
 
 	// FPS
 	int FPS = 60;
@@ -51,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
 	sound se = new sound();
 	public UI ui = new UI(this);
 	public EventHandler eHandler = new EventHandler(this);
+	Config config = new Config(this);
 	Thread gameThread; // El juego vas a seguir a pesar que tu no hacer nada tambien tiene que ver con
 						// los FPS
 	public Combat combat = new Combat(this);
@@ -63,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public Vector<primaryWeapons> weapons = new Vector<>(10);
 	public Vector<skills> abilities = new Vector<>(10);
 
-	public player player = new player(this, keyH);
+	public Player player = new Player(this, keyH);
 	public Entity npc[] = new Entity[10];
 	public Entity item[] = new Entity[20];
 	public Entity monster[] = new Entity[20];
@@ -82,6 +93,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int dialogueState = 3;
 	public final int battleState = 4;
 	public final int characterState = 5;
+	public final int optionState = 6;
+	public final int gameOverState = 7;
 
 	public GamePanel() {
 		setPreferredSize(new Dimension(screenWidth, screenHeigth));
@@ -105,6 +118,42 @@ public class GamePanel extends JPanel implements Runnable {
 		playMusic(6);
 		gameState = titleState;
 
+		tempScreen = new BufferedImage(screenWidth, screenHeigth, BufferedImage.TYPE_INT_ARGB);
+		g2 = (Graphics2D) tempScreen.getGraphics();
+
+		if (fullScreenOn) {
+			setFullScreen();
+		}
+	}
+
+	public void retry() {
+		player.setDefaultPositions();
+		player.restore();
+
+		aSetter.setNPC();
+		aSetter.setMonster();
+	}
+
+	public void restart() {
+		player.setDefaultValues();
+		player.setItems();
+
+		aSetter.setObject();
+		aSetter.setNPC();
+		aSetter.setMonster();
+		aSetter.setInteractiveTile();
+	}
+
+	public void setFullScreen() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		screenWidth2 = (int) width;
+		screenHeight2 = (int) height;
+		// offset factor to be used by mouse listener or mouse motion listener if you
+		// are using cursor in your game. Multiply your e.getX()e.getY() by this.
+//		fullScreenOffsetFactor = (float) screenWidth / (float) screenWidth2;
 	}
 
 	public void startGameThread() {
@@ -121,72 +170,35 @@ public class GamePanel extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		// Por ahora hay dos metodos que permiten restringir el juego para que corra
-		// solo a 60 FPS
-
-		// Metodo 1 @: Sleep method, usualmente se usan nano segundos como metodo de
-		// Metodo 2 $: Delta, supuestamente es el mas eficiente a pesar de que los dos
-		// hacen lo mismo
-		// calculacion
-		// Esto es 1 segundo en nano segundos
-		double drawInterval = 1000000000 / FPS; // 0.0166666 segundos
-		// $ double nextDrawTime = System.nanoTime() + drawInterval;
-		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-
-		// Para ver los FPS
+		double delta = 0;
+		double updateInterval = 1.0 / FPS;
 		long timer = 0;
 		int drawCount = 0;
 
-		// Mientras que el gameThread este activo, se va a repetir el proceso
 		while (gameThread != null) {
-			/*
-			 * // Para poder ver el tiempo actual que esta corriendo el sistema // long
-			 * currentTime = System.nanoTime(); // System.out.println("Current Time: " +
-			 * currentTime);
-			 */
-
-//			update();
-//			repaint();
-
-			// $
 			currentTime = System.nanoTime();
-			delta += (currentTime - lastTime) / drawInterval;
-			timer += (currentTime - lastTime);
+			delta += (currentTime - lastTime) / 1000000000.0; // Convert nanoseconds to seconds
 			lastTime = currentTime;
-			if (delta >= 1) {
+
+			while (delta >= updateInterval) {
+				// Update
 				update();
-				repaint();
-				delta--;
-				drawCount++;
+				delta -= updateInterval;
 			}
-			// $
 
-			if (timer >= 1000000000) {
-//				ui.showMessage("FPS: " + drawCount);
-				// System.out.println("FPS: " + drawCount);
+			// Draw
+			drawToTempScreen(); // Draw game into buffered image
+			drawToScreen(); // Draw buffered image to screen
+			drawCount++;
+
+			if (keyH.showDebugText && (System.nanoTime() - timer) >= 1000000000) {
+				FPS = drawCount;
 				drawCount = 0;
-				timer = 0;
+				timer = System.nanoTime();
 			}
-
-//	$		try {
-//				double remainingTime = nextDrawTime - System.nanoTime();
-//				// Esto es para pasar de nano segundo a mili segundos ya que el sleep solo
-//				// acepta mili segundos
-//				remainingTime = remainingTime / 1000000;
-//				if (remainingTime < 0) {
-//					remainingTime = 0;
-//				}
-//				Thread.sleep((long) remainingTime);
-//
-//				nextDrawTime += drawInterval;
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//	$		}
-
 		}
-
 	}
 
 	public void update() {
@@ -247,13 +259,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	// Graphics es una clase que tiene la funcion de dibujar objetos en la patalla
 	// El metodo repaint va a llamar a este metodo
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		// Graphics2D es una clase que extiende la clase Graphics. Este te da un control
-		// mas sofisticado
-		Graphics2D g2 = (Graphics2D) g;
-
+	public void drawToTempScreen() {
 		// DEBUG
 		long drawStart = 0;
 		if (keyH.showDebugText) {
@@ -267,22 +273,22 @@ public class GamePanel extends JPanel implements Runnable {
 			// Mundo
 			tileM.draw(g2);
 
-//			// NPC
-//			for (int i = 0; i < npc.length; i++) {
-//				if (npc[i] != null) {
-//					npc[i].draw(g2);
-//				}
-//			}
-//
-//			// Objeto
-//			for (int i = 0; i < item.length; i++) {
-//				if (item[i] != null) {
-//					item[i].draw(g2, this);
-//				}
-//			}
-//
-//			// Jugador
-//			player.draw(g2);
+//					// NPC
+//					for (int i = 0; i < npc.length; i++) {
+//						if (npc[i] != null) {
+//							npc[i].draw(g2);
+//						}
+//					}
+			//
+//					// Objeto
+//					for (int i = 0; i < item.length; i++) {
+//						if (item[i] != null) {
+//							item[i].draw(g2, this);
+//						}
+//					}
+			//
+//					// Jugador
+//					player.draw(g2);
 
 			// INTERACTIVE TILE
 			for (int i = 0; i < iTile.length; i++) {
@@ -311,16 +317,15 @@ public class GamePanel extends JPanel implements Runnable {
 					entityList.add(monster[i]);
 				}
 			}
-//			for (int i = 0; i < projectileList.size(); i++) {
-//				if (projectileList.get(i) != null) {
-//					entityList.add(projectileList.get(i));
-//				}
+//					for (int i = 0; i < projectileList.size(); i++) {
+//						if (projectileList.get(i) != null) {
+//							entityList.add(projectileList.get(i));
+//						}
 
 			for (int i = 0; i < particleList.size(); i++) {
 				if (particleList.get(i) != null) {
 					entityList.add(particleList.get(i));
 				}
-
 			}
 			// SORT
 			Collections.sort(entityList, new Comparator<Entity>() {
@@ -369,8 +374,12 @@ public class GamePanel extends JPanel implements Runnable {
 			System.out.println("Draw time: " + passed);
 		}
 
-		// Opcional, esto permite liberar un poco la memoria
-		g2.dispose();
+	}
+
+	public void drawToScreen() {
+		Graphics g = getGraphics();
+		g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+		g.dispose();
 	}
 
 	public void playMusic(int i) {

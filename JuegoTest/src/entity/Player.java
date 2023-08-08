@@ -15,7 +15,7 @@ import skills.secondaryWeapons;
 import skills.skills;
 import skills.specialEffect;
 
-public class player extends Entity {
+public class Player extends Entity {
 
 	KeyHandler keyH;
 
@@ -27,7 +27,7 @@ public class player extends Entity {
 	public ArrayList<Entity> inventory = new ArrayList<>();
 	public final int maxInventorySize = 20;
 
-	public player(GamePanel gp, KeyHandler keyH) {
+	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
 		this.keyH = keyH;
 
@@ -121,7 +121,21 @@ public class player extends Entity {
 		return skill;
 	}
 
+	public void setDefaultPositions() {
+		worldX = gp.tileSize * 24;
+		worldY = gp.tileSize * 24;
+		direction = "down";
+	}
+
+	public void restore() {
+		life = maxLife;
+		mana = maxMana;
+		stamina = maxStamina;
+		invincible = false;
+	}
+
 	public void setItems() {
+		inventory.clear();
 //		inventory.add(currentWeapon);
 //		inventory.add(currentShield);
 		inventory.add(new key(gp));
@@ -213,6 +227,7 @@ public class player extends Entity {
 
 			// Check Interactive Tile Collision
 			int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+			damageInteractiveTile(iTileIndex);
 
 			// Check Event
 			gp.eHandler.checkEvent();
@@ -297,6 +312,11 @@ public class player extends Entity {
 		}
 		if (stamina > maxStamina) {
 			stamina = maxStamina;
+		}
+
+		if (life <= 0) {
+			gp.gameState = gp.gameOverState;
+//			gp.playSE();
 		}
 	}
 
