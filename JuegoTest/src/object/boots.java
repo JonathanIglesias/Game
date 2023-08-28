@@ -14,6 +14,8 @@ public class boots extends Entity {
 		down1 = setup("/objects/botas", gp.tileSize, gp.tileSize);
 
 		collission = true;
+
+		price = 50;
 	}
 
 }

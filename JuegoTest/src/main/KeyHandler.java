@@ -84,6 +84,11 @@ public class KeyHandler implements KeyListener {
 			gameOverState(code);
 		}
 
+		// TRADE STATE
+		else if (gp.gameState == gp.tradeState) {
+			tradeState(code);
+		}
+
 		lastTime = time;
 	}
 
@@ -227,6 +232,7 @@ public class KeyHandler implements KeyListener {
 				gp.stopMusic();
 				gp.gameState = gp.playState;
 				gp.playMusic(5);
+				gp.ui.titleScreenState = 0;
 			}
 
 			else if (code == KeyEvent.VK_BACK_SPACE && gp.ui.commandNum > 0) {
@@ -314,7 +320,15 @@ public class KeyHandler implements KeyListener {
 		}
 
 		if (code == KeyEvent.VK_R) {
-			gp.tileM.loadMap("/maps/tiledata.txt");
+			switch (gp.currentMap) {
+			case 0:
+				gp.tileM.loadMap("/maps/mundo00.txt", 0);
+				break;
+			case 1:
+				gp.tileM.loadMap("/maps/house00.txt", 0);
+				break;
+			}
+
 		}
 	}
 
@@ -430,24 +444,56 @@ public class KeyHandler implements KeyListener {
 			gp.gameState = gp.playState;
 		}
 
+		if (code == KeyEvent.VK_ENTER) {
+			gp.player.selectItem();
+		}
+
+		playerInventory(code);
+
+	}
+
+	public void playerInventory(int code) {
 		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-			if (gp.ui.slotRow != 0) {
-				gp.ui.slotRow--;
+			if (gp.ui.playerSlotRow != 0) {
+				gp.ui.playerSlotRow--;
 			}
 		}
 		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
-			if (gp.ui.slotCol != 0) {
-				gp.ui.slotCol--;
+			if (gp.ui.playerSlotRow != 0) {
+				gp.ui.playerSlotRow--;
 			}
 		}
 		if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-			if (gp.ui.slotRow != 3) {
-				gp.ui.slotRow++;
+			if (gp.ui.playerSlotRow != 3) {
+				gp.ui.playerSlotRow++;
 			}
 		}
 		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-			if (gp.ui.slotCol != 4) {
-				gp.ui.slotCol++;
+			if (gp.ui.playerSlotCol != 4) {
+				gp.ui.playerSlotCol++;
+			}
+		}
+	}
+
+	public void npcInventory(int code) {
+		if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+			if (gp.ui.npcSlotRow != 0) {
+				gp.ui.npcSlotRow--;
+			}
+		}
+		if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+			if (gp.ui.npcSlotRow != 0) {
+				gp.ui.npcSlotRow--;
+			}
+		}
+		if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+			if (gp.ui.npcSlotRow != 3) {
+				gp.ui.npcSlotRow++;
+			}
+		}
+		if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+			if (gp.ui.npcSlotCol != 4) {
+				gp.ui.npcSlotCol++;
 			}
 		}
 	}
@@ -472,9 +518,46 @@ public class KeyHandler implements KeyListener {
 			if (gp.ui.commandNum == 0) {
 				gp.gameState = gp.playState;
 				gp.retry();
+//				gp.playMusic();
 			} else if (gp.ui.commandNum == 1) {
 				gp.gameState = gp.tileSize;
 				gp.restart();
+
+			}
+		}
+	}
+
+	public void tradeState(int code) {
+		if (code == KeyEvent.VK_ENTER) {
+			select = true;
+		}
+
+		if (gp.ui.subState == 0) {
+			if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+				gp.ui.commandNum--;
+				if (gp.ui.commandNum < 0) {
+					gp.ui.commandNum = 2;
+				}
+//				gp.playSE();
+			}
+			if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+				gp.ui.commandNum++;
+				if (gp.ui.commandNum > 2) {
+					gp.ui.commandNum = 0;
+				}
+//				gp.playSE();
+			}
+		}
+		if (gp.ui.subState == 1) {
+			npcInventory(code);
+			if (code == KeyEvent.VK_ESCAPE) {
+				gp.ui.subState = 0;
+			}
+		}
+		if (gp.ui.subState == 2) {
+			playerInventory(code);
+			if (code == KeyEvent.VK_ESCAPE) {
+				gp.ui.subState = 0;
 			}
 		}
 	}

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
 
+import entity.NPC_Merchant;
 import entity.NPC_OldMan;
 import monster.Monster_Creeper;
 import object.boots;
@@ -28,37 +29,55 @@ public class AssetSetter {
 	// Items
 	public void setObject() {
 
-		gp.item[0] = new boots(gp);
-		gp.item[0].worldX = 24 * gp.tileSize;
-		gp.item[0].worldY = 6 * gp.tileSize;
+		int mapNum = 0;
+		gp.item[mapNum][0] = new boots(gp);
+		gp.item[mapNum][0].worldX = 24 * gp.tileSize;
+		gp.item[mapNum][0].worldY = 6 * gp.tileSize;
 
-		gp.item[1] = new key(gp);
-		gp.item[1].worldX = 39 * gp.tileSize;
-		gp.item[1].worldY = 16 * gp.tileSize;
+		gp.item[mapNum][1] = new key(gp);
+		gp.item[mapNum][1].worldX = 39 * gp.tileSize;
+		gp.item[mapNum][1].worldY = 16 * gp.tileSize;
 
-		gp.item[2] = new chest(gp);
-		gp.item[2].worldX = 43 * gp.tileSize;
-		gp.item[2].worldY = 43 * gp.tileSize;
+		gp.item[mapNum][2] = new chest(gp);
+		gp.item[mapNum][2].worldX = 43 * gp.tileSize;
+		gp.item[mapNum][2].worldY = 43 * gp.tileSize;
 
-		gp.item[3] = new door(gp);
-		gp.item[3].worldX = 43 * gp.tileSize;
-		gp.item[3].worldY = 41 * gp.tileSize;
+		gp.item[mapNum][3] = new door(gp);
+		gp.item[mapNum][3].worldX = 43 * gp.tileSize;
+		gp.item[mapNum][3].worldY = 41 * gp.tileSize;
 
-		gp.item[4] = new test(gp);
-		gp.item[4].worldX = gp.tileSize * 10;
-		gp.item[4].worldY = gp.tileSize * 30;
+		gp.item[mapNum][4] = new test(gp);
+		gp.item[mapNum][4].worldX = gp.tileSize * 10;
+		gp.item[mapNum][4].worldY = gp.tileSize * 30;
 	}
 
 	public void setNPC() {
-		gp.npc[0] = new NPC_OldMan(gp);
-		gp.npc[0].worldX = gp.tileSize * 9;
-		gp.npc[0].worldY = gp.tileSize * 11;
+
+		int mapNum = 0;
+		int i = 0;
+
+		// MAP 0
+		gp.npc[mapNum][i] = new NPC_OldMan(gp);
+		gp.npc[mapNum][i].worldX = gp.tileSize * 9;
+		gp.npc[mapNum][i].worldY = gp.tileSize * 11;
+		i++;
+
+		// MAP 1
+		mapNum = 1;
+		i = 0;
+		gp.npc[mapNum][i] = new NPC_Merchant(gp);
+		gp.npc[mapNum][i].worldX = gp.tileSize * 25;
+		gp.npc[mapNum][i].worldY = gp.tileSize * 23;
+		i++;
+
 	}
 
 	public void setMonster() {
-		gp.monster[0] = new Monster_Creeper(gp);
-		gp.monster[0].worldX = gp.tileSize * 10;
-		gp.monster[0].worldY = gp.tileSize * 35;
+
+		int mapNum = 0;
+		gp.monster[mapNum][0] = new Monster_Creeper(gp);
+		gp.monster[mapNum][0].worldX = gp.tileSize * 10;
+		gp.monster[mapNum][0].worldY = gp.tileSize * 35;
 	}
 
 	public void setInteractiveTile() {

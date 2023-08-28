@@ -43,6 +43,8 @@ public class GamePanel extends JPanel implements Runnable {
 	// WORLD SETTINGS
 	public int maxWorldCol;
 	public int maxWorldRow;
+	public final int maxMap = 10;
+	public int currentMap = 0;
 
 	// For FULL SCREEN
 	int screenWidth2 = screenWidth;
@@ -75,11 +77,11 @@ public class GamePanel extends JPanel implements Runnable {
 	public Vector<skills> abilities = new Vector<>(10);
 
 	public Player player = new Player(this, keyH);
-	public Entity npc[] = new Entity[10];
-	public Entity item[] = new Entity[20];
-	public Entity monster[] = new Entity[20];
+	public Entity npc[][] = new Entity[maxMap][10];
+	public Entity item[][] = new Entity[maxMap][20];
+	public Entity monster[][] = new Entity[maxMap][20];
 	public ArrayList<Entity> entityList = new ArrayList<>();
-	public InteractiveTile iTile[] = new InteractiveTile[50];
+	public InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];
 	public ArrayList<Entity> particleList = new ArrayList<>();
 //	public ArrayList<Entity> projectileList = new ArrayList<>();
 
@@ -95,6 +97,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int characterState = 5;
 	public final int optionState = 6;
 	public final int gameOverState = 7;
+	public final int transitionState = 8;
+	public final int tradeState = 9;
 
 	public GamePanel() {
 		setPreferredSize(new Dimension(screenWidth, screenHeigth));
@@ -207,19 +211,19 @@ public class GamePanel extends JPanel implements Runnable {
 			// Player
 			player.update();
 			// NPC
-			for (int i = 0; i < npc.length; i++) {
-				if (npc[i] != null) {
-					npc[i].update();
+			for (int i = 0; i < npc[1].length; i++) {
+				if (npc[currentMap][i] != null) {
+					npc[currentMap][i].update();
 				}
 			}
-			for (int i = 0; i < monster.length; i++) {
-				if (monster[i] != null) {
-					if (monster[i].alive == true && monster[i].dying == false) {
-						monster[i].update();
+			for (int i = 0; i < monster[1].length; i++) {
+				if (monster[currentMap][i] != null) {
+					if (monster[currentMap][i].alive == true && monster[currentMap][i].dying == false) {
+						monster[currentMap][i].update();
 					}
-					if (monster[i].alive == false) {
-						monster[i].checkDrop();
-						monster[i] = null;
+					if (monster[currentMap][i].alive == false) {
+						monster[currentMap][i].checkDrop();
+						monster[currentMap][i] = null;
 					}
 				}
 			}
@@ -245,15 +249,15 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 
-			for (int i = 0; i < iTile.length; i++) {
-				if (iTile[i] != null) {
-					iTile[i].update();
+			for (int i = 0; i < iTile[1].length; i++) {
+				if (iTile[currentMap][i] != null) {
+					iTile[currentMap][i].update();
 				}
 			}
 
 		}
 		if (gameState == pauseState) {
-
+			// nothing
 		}
 	}
 
@@ -291,30 +295,30 @@ public class GamePanel extends JPanel implements Runnable {
 //					player.draw(g2);
 
 			// INTERACTIVE TILE
-			for (int i = 0; i < iTile.length; i++) {
-				if (iTile[i] != null) {
-					iTile[i].draw(g2);
+			for (int i = 0; i < iTile[1].length; i++) {
+				if (iTile[currentMap][i] != null) {
+					iTile[currentMap][i].draw(g2);
 				}
 			}
 
 			// ADD ENTITY TO THE LIST
 			entityList.add(player);
 
-			for (int i = 0; i < npc.length; i++) {
-				if (npc[i] != null) {
-					entityList.add(npc[i]);
+			for (int i = 0; i < npc[1].length; i++) {
+				if (npc[currentMap][i] != null) {
+					entityList.add(npc[currentMap][i]);
 				}
 			}
 
-			for (int i = 0; i < item.length; i++) {
-				if (item[i] != null) {
-					entityList.add(item[i]);
+			for (int i = 0; i < item[1].length; i++) {
+				if (item[currentMap][i] != null) {
+					entityList.add(item[currentMap][i]);
 				}
 			}
 
-			for (int i = 0; i < monster.length; i++) {
-				if (monster[i] != null) {
-					entityList.add(monster[i]);
+			for (int i = 0; i < monster[1].length; i++) {
+				if (monster[currentMap][i] != null) {
+					entityList.add(monster[currentMap][i]);
 				}
 			}
 //					for (int i = 0; i < projectileList.size(); i++) {
@@ -373,6 +377,8 @@ public class GamePanel extends JPanel implements Runnable {
 			g2.drawString("Draw Time: " + passed, x, y);
 			System.out.println("Draw time: " + passed);
 		}
+
+//		g2.dispose();
 
 	}
 

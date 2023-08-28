@@ -65,7 +65,7 @@ public class Combat {
 		gp.ui.currentDialogue = gp.player.name + " use " + gp.player.attackslot[ability].getName();
 
 		if (firstTime) {
-			gp.monster[monsterID].life -= gp.player.getAttack(ability);
+			gp.monster[gp.currentMap][monsterID].life -= gp.player.getAttack(ability);
 			gp.player.stamina -= gp.player.attackslot[ability].getCost();
 			firstTime = false;
 
@@ -76,15 +76,15 @@ public class Combat {
 	}
 
 	public void enemyTurn() {
-		gp.ui.currentDialogue = gp.monster[monsterID].name + " use "
-				+ gp.monster[monsterID].attackslot[enemySlot].getName();
+		gp.ui.currentDialogue = gp.monster[gp.currentMap][monsterID].name + " use "
+				+ gp.monster[gp.currentMap][monsterID].attackslot[enemySlot].getName();
 
 		if (firstTime) {
-			gp.player.life -= gp.monster[monsterID].attackslot[enemySlot].getDamage();
+			gp.player.life -= gp.monster[gp.currentMap][monsterID].attackslot[enemySlot].getDamage();
 			firstTime = false;
 
-			if (gp.monster[monsterID].attackslot[enemySlot].getSpecialEffect() != null) {
-				getEffect(gp.monster[monsterID], enemySlot);
+			if (gp.monster[gp.currentMap][monsterID].attackslot[enemySlot].getSpecialEffect() != null) {
+				getEffect(gp.monster[gp.currentMap][monsterID], enemySlot);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ public class Combat {
 		if (entity.attackslot[ability].getSpecialEffect().getObjective().equalsIgnoreCase(("player"))) {
 			entity.attackslot[ability].getSpecialEffect().getEffect(gp.player);
 		} else {
-			entity.attackslot[ability].getSpecialEffect().getEffect(gp.monster[monsterID]);
+//			entity.attackslot[ability].getSpecialEffect().getEffect(gp.monster[monsterID]);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class Combat {
 				if (gp.player.attackslot[i].getSpecialEffect().getObjective().equals("self")) {
 					gp.player.attackslot[i].getSpecialEffect().check(gp.player);
 				} else {
-					gp.player.attackslot[i].getSpecialEffect().check(gp.monster[monsterID]);
+//					gp.player.attackslot[i].getSpecialEffect().check(gp.monster[monsterID]);
 				}
 			}
 		}

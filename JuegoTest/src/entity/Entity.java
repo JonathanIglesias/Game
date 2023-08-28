@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -63,10 +64,13 @@ public class Entity {
 	public secondaryWeapons currentShield;
 
 	// ITEM ATRIBUTES
+	public ArrayList<Entity> inventory = new ArrayList<>();
+	public final int maxInventorySize = 20;
 	public int value;
 	public int attackValue;
 	public int defenseValue;
 	public String description = "";
+	public int price;
 
 	// TYPE modificar
 	public int type; // 0 = player, 1 = npc, 2 = monster
@@ -135,11 +139,11 @@ public class Entity {
 	}
 
 	public void dropItem(Entity droppedItem) {
-		for (int i = 0; i < gp.item.length; i++) {
-			if (gp.item[i] == null) {
-				gp.item[i] = droppedItem;
-				gp.item[i].worldX = worldX; // The dead monster's coordinates
-				gp.item[i].worldY = worldY;
+		for (int i = 0; i < gp.item[1].length; i++) {
+			if (gp.item[gp.currentMap][i] == null) {
+				gp.item[gp.currentMap][i] = droppedItem;
+				gp.item[gp.currentMap][i].worldX = worldX; // The dead monster's coordinates
+				gp.item[gp.currentMap][i].worldY = worldY;
 				break;
 			}
 		}

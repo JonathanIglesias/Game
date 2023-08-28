@@ -15,5 +15,7 @@ public class key extends Entity {
 		collission = true;
 
 		description = "[" + name + "]\nA normal key";
+
+		price = 25;
 	}
 }
