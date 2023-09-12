@@ -40,39 +40,50 @@ public class NPC_OldMan extends Entity {
 
 	public void setAction() {
 
-		actionLockCounter++;
+		if (onPath) {
+			int goalCol = 23;
+			int goalRow = 19;
 
-		if (actionLockCounter == 120) {
-			move = true;
-			speed = 1;
-			Random random = new Random();
-			int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
+			searchPath(goalCol, goalRow);
 
-			if (i <= 25) {
-				direction = "up";
-			}
-			if (i > 25 && i <= 50) {
-				direction = "down";
-			}
-			if (i > 50 && i <= 75) {
-				direction = "left";
-			}
-			if (i > 70 && i <= 100) {
-				direction = "right";
+		} else {
+
+			actionLockCounter++;
+
+			if (actionLockCounter == 120) {
+				move = true;
+				speed = 1;
+				Random random = new Random();
+				int i = random.nextInt(100) + 1; // pick up a number from 1 to 100
+
+				if (i <= 25) {
+					direction = "up";
+				}
+				if (i > 25 && i <= 50) {
+					direction = "down";
+				}
+				if (i > 50 && i <= 75) {
+					direction = "left";
+				}
+				if (i > 70 && i <= 100) {
+					direction = "right";
+				}
+
 			}
 
-		}
-
-		if (actionLockCounter == 240) {
-			move = false;
-			speed = 0;
-			actionLockCounter = 0;
-			spriteNum = 1;
-			spriteCounter = 0;
+			if (actionLockCounter == 240) {
+				move = false;
+				speed = 0;
+				actionLockCounter = 0;
+				spriteNum = 1;
+				spriteCounter = 0;
+			}
 		}
 	}
 
 	public void speak() {
 		super.speak();
+
+		onPath = true;
 	}
 }

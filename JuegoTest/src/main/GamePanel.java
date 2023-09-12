@@ -15,6 +15,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
 import skills.primaryWeapons;
@@ -38,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int maxScreenCol = 20;
 	public final int maxScreenRow = 12;
 	public final int screenWidth = tileSize * maxScreenCol; // 768 pixeles
-	public final int screenHeigth = tileSize * maxScreenRow;// 576 pixeles
+	public final int screenHeight = tileSize * maxScreenRow;// 576 pixeles
 
 	// WORLD SETTINGS
 	public int maxWorldCol;
@@ -48,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	// For FULL SCREEN
 	int screenWidth2 = screenWidth;
-	int screenHeight2 = screenHeigth;
+	int screenHeight2 = screenHeight;
 	BufferedImage tempScreen;
 	Graphics2D g2;
 	public boolean fullScreenOn = false;
@@ -57,13 +58,14 @@ public class GamePanel extends JPanel implements Runnable {
 	int FPS = 60;
 
 	// SYSTEM
-	tileManager tileM = new tileManager(this);
+	public tileManager tileM = new tileManager(this);
 	public KeyHandler keyH = new KeyHandler(this);
 	sound music = new sound();
 	sound se = new sound();
 	public UI ui = new UI(this);
 	public EventHandler eHandler = new EventHandler(this);
 	Config config = new Config(this);
+	public PathFinder pFinder = new PathFinder(this);
 	Thread gameThread; // El juego vas a seguir a pesar que tu no hacer nada tambien tiene que ver con
 						// los FPS
 	public Combat combat = new Combat(this);
@@ -101,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int tradeState = 9;
 
 	public GamePanel() {
-		setPreferredSize(new Dimension(screenWidth, screenHeigth));
+		setPreferredSize(new Dimension(screenWidth, screenHeight));
 		setBackground(Color.black); // Opcional
 		setDoubleBuffered(true); // Si se establece como verdadero, todos los dibujos de este componente se
 									// realizarán en un búfer de pintura fuera de la pantalla.
@@ -120,9 +122,9 @@ public class GamePanel extends JPanel implements Runnable {
 		aSetter.setInteractiveTile();
 		aSetter.setStage();
 		playMusic(6);
-		gameState = titleState;
+		gameState = playState;
 
-		tempScreen = new BufferedImage(screenWidth, screenHeigth, BufferedImage.TYPE_INT_ARGB);
+		tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
 		g2 = (Graphics2D) tempScreen.getGraphics();
 
 		if (fullScreenOn) {
@@ -374,8 +376,8 @@ public class GamePanel extends JPanel implements Runnable {
 			g2.drawString("Row" + (player.worldY + player.solidArea.y) / tileSize, x, y);
 			y += lineHeight;
 
-			g2.drawString("Draw Time: " + passed, x, y);
-			System.out.println("Draw time: " + passed);
+//			g2.drawString("Draw Time: " + passed, x, y);
+//			System.out.println("Draw time: " + passed);
 		}
 
 //		g2.dispose();

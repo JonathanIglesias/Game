@@ -29,7 +29,7 @@ public class Player extends Entity {
 		this.keyH = keyH;
 
 		screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-		screenY = gp.screenHeigth / 2 - (gp.tileSize / 2);
+		screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 		// SOLID AREA
 		solidArea = new Rectangle();
 		solidArea.x = 8;
@@ -664,6 +664,26 @@ public class Player extends Entity {
 			}
 			break;
 		}
+
+//		int x = screenX;
+//		int y = screenY;
+//
+//		if (screenX > worldX) {
+//			x = worldX;
+//		}
+//		if (screenY > worldY) {
+//			y = worldY;
+//		}
+//
+//		int rightOffset = gp.screenWidth - screenX;
+//		if (rightOffset > gp.worldWidth - worldX) {
+//			x = gp.screenWidth - (gp.worldWidth - worldX);
+//		}
+//
+//		int bottomOffset = gp.screenHeigth - screenY;
+//		if (bottomOffset > gp.worldHeight - worldY) {
+//			y = gp.screenHeigth - (gp.worldHeight - worldY);
+//		}
 
 		if (invincible == true) {
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));

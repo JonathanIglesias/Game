@@ -86,7 +86,7 @@ public class UI {
 
 		if (gp.gameState == gp.titleState) {
 //			g2.setColor(new Color(0, 0, 0, 255));
-//			g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+//			g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 //			subState = 0;
 			drawTitleScreen();
 		}
@@ -145,13 +145,13 @@ public class UI {
 			text = "You found the treasure";
 			textlength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 			x = gp.screenWidth / 2 - textlength / 2;
-			y = gp.screenHeigth / 2 - (gp.tileSize * 3);
+			y = gp.screenHeight / 2 - (gp.tileSize * 3);
 			g2.drawString(text, x, y);
 
 			text = "Your time is: " + dFormat.format(playTime) + "!";
 			textlength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 			x = gp.screenWidth / 2 - textlength / 2;
-			y = gp.screenHeigth / 2 + (gp.tileSize * 4);
+			y = gp.screenHeight / 2 + (gp.tileSize * 4);
 			g2.drawString(text, x, y);
 
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
@@ -161,7 +161,7 @@ public class UI {
 			text = "Congratulations!";
 			textlength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 			x = gp.screenWidth / 2 - textlength / 2;
-			y = gp.screenHeigth / 2 + (gp.tileSize * 2);
+			y = gp.screenHeight / 2 + (gp.tileSize * 2);
 			g2.drawString(text, x, y);
 
 			gp.gameThread = null;
@@ -718,7 +718,7 @@ public class UI {
 	public void title_main() {
 		// SETTING THE BACKGROUND COLOR
 		g2.setColor(new Color(70, 120, 80));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		// TITLE NAME
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
@@ -769,7 +769,7 @@ public class UI {
 
 	public void title_character() {
 		g2.setColor(new Color(70, 120, 80));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		// Class Selection Screen
 		g2.setColor(Color.white);
@@ -807,7 +807,7 @@ public class UI {
 
 	public void title_name() {
 		g2.setColor(new Color(70, 120, 80));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(45F));
@@ -830,7 +830,7 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));
 		String text = "PAUSED";
 		int x = getXforCenteredText(text);
-		int y = gp.screenHeigth / 2;
+		int y = gp.screenHeight / 2;
 		g2.drawString(text, x, y);
 	}
 
@@ -869,7 +869,7 @@ public class UI {
 
 	public void drawGameOverScreen() {
 		g2.setColor(new Color(0, 0, 0, 150));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		int x;
 		int y;
@@ -1149,7 +1149,7 @@ public class UI {
 	public void drawTransition() {
 		counter += 2;
 		g2.setColor(new Color(0, 0, 0, counter * 5));
-		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeigth);
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
 		if (counter == 50) {
 			counter = 0;

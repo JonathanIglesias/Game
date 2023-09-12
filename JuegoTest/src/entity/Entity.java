@@ -41,6 +41,7 @@ public class Entity {
 	public int actionLockCounter;
 	String dialogues[] = new String[20];
 	int dialogueIndex = 0;
+	public boolean onPath = false;
 
 	// Combat
 	public boolean invincible = false;
@@ -186,9 +187,7 @@ public class Entity {
 
 	}
 
-	public void update() {
-		setAction();
-
+	public void checkCollision() {
 		collisionOn = false;
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
@@ -206,6 +205,11 @@ public class Entity {
 				gp.player.invincible = true;
 			}
 		}
+	}
+
+	public void update() {
+		setAction();
+		checkCollision();
 
 		if (collisionOn == false) {
 
@@ -251,6 +255,22 @@ public class Entity {
 
 		int screenX = worldX - gp.player.worldX + gp.player.screenX;
 		int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+//		// STOP MOVING CAMERA
+//		if (gp.player.worldX < gp.player.screenX) {
+//			screenX = worldX;
+//		}
+//		if (gp.player.worldY < gp.player.screenY) {
+//			screenY = worldY;
+//		}
+//		int rightOffset = gp.screenWidth - gp.player.screenX;
+//		if (rightOffset > gp.worldWidth - gp.player.worldX) {
+//			screenX = gp.screenWidth - (gp.worldWidth - worldX);
+//		}
+//		int bottomOffset = gp.screenHeight - gp.player.screenY;
+//		if (bottomOffset > gp.worldHeight - gp.player.worldY) {
+//			screenY = gp.screenHeight - (gp.worldHeight - worldY);
+//		}
 
 		if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
 				&& worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
@@ -313,6 +333,19 @@ public class Entity {
 
 			g2.drawImage(image, screenX, screenY, null);
 
+//			if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
+//					&& worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+//					&& worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
+//					&& worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+//				g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+//			}
+//			// If player is around the edge, draw everything
+//			else if (gp.player.worldX < gp.player.screenX || gp.player.worldY < gp.player.screenY
+//					|| rightOffset > gp.worldWidth - gp.player.worldX
+//					|| bottomOffset > gp.worldHeight - gp.player.worldY) {
+//				g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+//			}
+
 			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 		}
 
@@ -371,4 +404,85 @@ public class Entity {
 		return image;
 	}
 
+	public void searchPath(int goalCol, int goalRow) {
+
+		direction = "down";
+		System.out.println("Start");
+
+		int startCol = (worldX + solidArea.x) / gp.tileSize;
+		int startRow = (worldY + solidArea.y) / gp.tileSize;
+
+		gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+		if (gp.pFinder.search()) {
+
+			System.out.println(collisionOn);
+
+			// Next worldX & worldY
+			int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+			int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+
+			// Entity's solidArea position
+			int enLeftX = worldX + solidArea.x;
+			int enRightX = worldX + solidArea.x + solidArea.width;
+			int enTopY = worldY + solidArea.y;
+			int enBottomY = worldY + solidArea.y + solidArea.height;
+
+			if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+				direction = "up";
+			} else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+				direction = "down";
+			} else if (enTopY >= nextY && enBottomY < nextY + gp.tileSize) {
+				// left or right
+				if (enLeftX > nextX) {
+					direction = "left";
+				} else if (enLeftX < nextX) {
+					direction = "right";
+				}
+			} else if (enTopY > nextY && enLeftX > nextX) {
+				// up or left
+				direction = "up";
+				System.out.println("up2");
+				checkCollision();
+				if (collisionOn) {
+					direction = "left";
+					System.out.println("left2");
+				}
+			} else if (enTopY > nextY && enLeftX < nextX) {
+				// up or right
+				direction = "up";
+				System.out.println("up3");
+				checkCollision();
+				if (collisionOn) {
+					direction = "right";
+					System.out.println("right2");
+				}
+			} else if (enTopY < nextY && enLeftX > nextX) {
+				// down or left
+				direction = "down";
+				System.out.println("down2");
+				checkCollision();
+				if (collisionOn) {
+					direction = "left";
+					System.out.println("left3");
+				}
+			} else if (enTopY < nextY && enLeftX < nextX) {
+				// down or right
+				direction = "down";
+				System.out.println("down3");
+				checkCollision();
+				if (collisionOn) {
+					direction = "right";
+					System.out.println("right3");
+				}
+			}
+		}
+
+		// Goal achieved
+		int nextCol = gp.pFinder.pathList.get(0).col;
+		int nextRow = gp.pFinder.pathList.get(0).row;
+		if (nextCol == goalCol && nextRow == goalRow) {
+			onPath = false;
+		}
+	}
 }
