@@ -442,38 +442,30 @@ public class Entity {
 			} else if (enTopY > nextY && enLeftX > nextX) {
 				// up or left
 				direction = "up";
-				System.out.println("up2");
 				checkCollision();
 				if (collisionOn) {
 					direction = "left";
-					System.out.println("left2");
 				}
 			} else if (enTopY > nextY && enLeftX < nextX) {
 				// up or right
 				direction = "up";
-				System.out.println("up3");
 				checkCollision();
 				if (collisionOn) {
 					direction = "right";
-					System.out.println("right2");
 				}
 			} else if (enTopY < nextY && enLeftX > nextX) {
 				// down or left
 				direction = "down";
-				System.out.println("down2");
 				checkCollision();
 				if (collisionOn) {
 					direction = "left";
-					System.out.println("left3");
 				}
 			} else if (enTopY < nextY && enLeftX < nextX) {
 				// down or right
 				direction = "down";
-				System.out.println("down3");
 				checkCollision();
 				if (collisionOn) {
 					direction = "right";
-					System.out.println("right3");
 				}
 			}
 		}
